@@ -12,16 +12,21 @@ import (
 
 // Supplier 是供应商模型
 type Supplier struct {
-	SupplierID  int    `gorm:"primary_key"`
-	CompanyName string `gorm:"size:100"`
-	ContactName string `gorm:"size:50"`
-	Address     string `gorm:"size:200"`
-	City        string `gorm:"size:50"`
-	State       string `gorm:"size:50"`
-	CountryID   int
-	PostalCode  string `gorm:"size:20"`
-	Phone       string `gorm:"size:20"`
-	Email       string `gorm:"size:100"`
+	SupplierID  int    `gorm:"column:SupplierID;primary_key"`
+	CompanyName string `gorm:"column:CompanyName;size:100"`
+	ContactName string `gorm:"column:ContactName;size:50"`
+	Address     string `gorm:"column:Address;size:200"`
+	City        string `gorm:"column:City;size:50"`
+	State       string `gorm:"column:State;size:50"`
+	CountryID   int    `gorm:"column:CountryID"`
+	PostalCode  string `gorm:"column:PostalCode;size:20"`
+	Phone       string `gorm:"column:Phone;size:20"`
+	Email       string `gorm:"column:Email;size:100"`
+}
+
+// 设置表名
+func (Supplier) TableName() string {
+	return "Suppliers"
 }
 
 var (
@@ -31,7 +36,7 @@ var (
 
 func main() {
 	// 连接数据库
-	db, err = gorm.Open("mssql", "sqlserver://username:password@localhost:1433?database=your_database_name")
+	db, err = gorm.Open("mssql", "sqlserver://sa:wu199010@localhost:1433?database=CrossBorderECDb")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -58,7 +63,16 @@ func main() {
 // 获取所有供应商
 func getSuppliers(c *gin.Context) {
 	var suppliers []Supplier
-	db.Find(&suppliers)
+
+	if err := db.Find(&suppliers).Error; err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve suppliers"})
+		return
+	}
+	//db.Find(&suppliers)
+	//c.JSON(http.StatusOK, gin.H{"suppliers": suppliers})
+	//调试输出
+	fmt.Println(suppliers)
 	c.JSON(http.StatusOK, suppliers)
 }
 

@@ -11,8 +11,8 @@ func main() {
 	// 创建Redis客户端
 	client := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379", // Redis服务器地址
-		Password: "",               // Redis密码，如果没有设置可以为空
-		DB:       0,                // Redis数据库索引
+		Password: "123456",         // Redis密码，如果没有设置可以为空
+		DB:       1,                // Redis数据库索引
 	})
 
 	// 检查是否与Redis服务器建立连接
@@ -46,8 +46,8 @@ func main() {
 	fmt.Println("fruits:", fruits)
 
 	// 操作有序集合数据
-	err = client.ZAdd("scores", redis.Z{Score: 90, Member: "Alice"}).Err()  // 添加成员"Alice"和对应的分数90到有序集合"scores"
-	err = client.ZAdd("scores", redis.Z{Score: 80, Member: "Bob"}).Err()     // 添加成员"Bob"和对应的分数80到有序集合"scores"
+	err = client.ZAdd("scores", redis.Z{Score: 90, Member: "Alice"}).Err() // 添加成员"Alice"和对应的分数90到有序集合"scores"
+	err = client.ZAdd("scores", redis.Z{Score: 80, Member: "Bob"}).Err()   // 添加成员"Bob"和对应的分数80到有序集合"scores"
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -61,11 +61,11 @@ func main() {
 	}
 
 	// 操作哈希数据
-	err = client.HSet("user", "name", "John").Err()     // 设置哈希"user"的字段"name"的值为"John"
-	err = client.HSet("user", "age", "30").Err()        // 设置哈希"user"的字段"age"的值为"30"
+	err = client.HSet("user", "name", "John").Err()              // 设置哈希"user"的字段"name"的值为"John"
+	err = client.HSet("user", "age", "30").Err()                 // 设置哈希"user"的字段"age"的值为"30"
 	err = client.HSet("user", "email", "john@example.com").Err() // 设置哈希"user"的字段"email"的值为"john@example.com"
-	
-		err = client.HSet("user", "address", "123 Main St").Err() // 设置哈希"user"的字段"address"的值为"123 Main St"
+
+	err = client.HSet("user", "address", "123 Main St").Err() // 设置哈希"user"的字段"address"的值为"123 Main St"
 	if err != nil {
 		log.Fatal(err)
 	}

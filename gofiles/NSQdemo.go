@@ -6,7 +6,6 @@ import (
 	"os/signal"
 	"sync"
 	"syscall"
-	"time"
 
 	"github.com/nsqio/go-nsq"
 )
